@@ -1,6 +1,8 @@
 const express = require('express')
-const app = express();
+const router= express.Router()
 const authentication = require('./authentication')
+const brand=require('./brand')
 
-app.use('/', authentication)
-module.exports = app
+router.use('/', authentication)
+router.use('/', brand)
+module.exports = router

@@ -1,6 +1,6 @@
 // Registration.js
 const { Sequelize, DataTypes } = require('sequelize');
-const {sq} = require('../config/db'); // Import your Sequelize instance
+const { sq } = require('../config/db'); // Import your Sequelize instance
 
 const registration = sq.define('registration', {
   name: {
@@ -22,6 +22,12 @@ const registration = sq.define('registration', {
   dob: {
     type: DataTypes.DATE,
   },
-});
+
+},
+  {
+    timestamps: false,
+    freezeTableName: true,
+  }
+);
 
 module.exports = registration;

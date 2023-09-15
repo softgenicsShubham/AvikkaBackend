@@ -155,7 +155,7 @@ const getAuthentication = async (req, res) => {
 
   try {
     // Check if the user already exists in the database
-    const existingUser = await Registration.findOne({ where: { mobile_num: mobilenumber } });
+    const existingUser = await registration.findOne({ where: { mobile_num: mobilenumber } });
 
     if (!existingUser) {
       // User does not exist in the database; generate OTP, JWT, and send OTP

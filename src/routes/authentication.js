@@ -1,5 +1,5 @@
 const express = require('express')
-const router = express()
+const router = express.Router()
 const authenticationapi = require('../controllers/authentication')
 
 router.post('/auth/', authenticationapi.getAuthentication)
