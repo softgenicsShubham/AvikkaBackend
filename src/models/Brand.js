@@ -2,7 +2,7 @@ const {sq}=require('../config/db')
 const { Sequelize, DataTypes } = require('sequelize');
 
 const Brand=sq.define('brand',{
-    id: {
+    brand_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         autoIncrement: true,
