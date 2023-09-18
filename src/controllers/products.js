@@ -6,7 +6,7 @@ const path = require('path');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'public/uploads/'); // Set the directory where uploaded files will be stored
+    cb(null, 'public/uploads/productthumbnail'); // Set the directory where uploaded files will be stored
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + '-' + file.originalname); // Set the file name
@@ -33,6 +33,7 @@ const Addproduct = async (req, res) => {
       // Access the uploaded files via req.files
     //   const productImage = req.files['product_img'][0];
       const thumbnailImage = req.files['product_thumnail_img'][0];
+      const imageUrl = `uploads/productthumbnail/${thumbnailImage.filename}`;
 
       // Create a new product record in the database
       Products.create({
@@ -43,7 +44,7 @@ const Addproduct = async (req, res) => {
         product_description: req.body.product_description,
         product_price: req.body.product_price,
         // product_img: productImage.filename, // Store the selected product image
-        product_thumnail_img: thumbnailImage.filename, // Store the selected thumbnail image
+        product_thumnail_img: imageUrl, // Store the selected thumbnail image
         product_ad: req.body.product_ad,
         offer: req.body.offer,
         count_in_stock:req.body.count_in_stock,
@@ -58,8 +59,25 @@ const Addproduct = async (req, res) => {
   }
 };
 
+const getproduct=async(req,res)=>{
+  
+  try {
+    const products = await Products.findAll();
+    // res.json(products);
+    console.log(products,"pppppppp")
 
+    return res.status(200).send({
+      success: 'success',
+      result: products,
+    });
+
+  }catch(error){
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
 
 module.exports = {
-    Addproduct
+    Addproduct,
+    getproduct
 }

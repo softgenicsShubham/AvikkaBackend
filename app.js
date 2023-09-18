@@ -19,6 +19,7 @@ testDbConnection()
 
 // Parse JSON-encoded bodies
 app.use(body_parser.json());
+app.use(express.static('./public'));
 
 // Parse URL-encoded bodies
 app.use(body_parser.urlencoded({ extended: true }));
