@@ -60,6 +60,11 @@ const Products = sq.define('products', {
         allowNull: true
 
     },
+    discount:{
+        type: DataTypes.FLOAT,
+        allowNull: true
+
+    },
     createdAt: {
         type: DataTypes.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), // Set the default value to the current timestamp

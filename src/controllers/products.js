@@ -48,7 +48,8 @@ const Addproduct = async (req, res) => {
         product_ad: req.body.product_ad,
         offer: req.body.offer,
         count_in_stock:req.body.count_in_stock,
-        rating:req.body.rating
+        rating:req.body.rating,
+        discount:req.body.discount
       });
 
       return res.json({ message: 'Product added successfully' });
