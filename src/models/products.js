@@ -65,6 +65,26 @@ const Products = sq.define('products', {
         allowNull: true
 
     },
+    ideal_for:{
+        type: DataTypes.ARRAY(DataTypes.STRING), // Replace STRING with the appropriate data type for your array elements
+        allowNull: true
+
+    },
+    product_work_for:{
+        type: DataTypes.ARRAY(DataTypes.STRING), // Replace STRING with the appropriate data type for your array elements
+        allowNull: true
+
+    },
+    highlights:{
+        type: DataTypes.STRING,
+        allowNull: true
+
+    },
+    product_expiry_date:{
+        type: DataTypes.STRING,
+        allowNull: false
+
+    },
     createdAt: {
         type: DataTypes.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), // Set the default value to the current timestamp
