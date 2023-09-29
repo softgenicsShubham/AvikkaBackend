@@ -3,6 +3,12 @@ const { Sequelize, DataTypes } = require('sequelize');
 const { sq } = require('../config/db'); // Import your Sequelize instance
 
 const registration = sq.define('registration', {
+  user_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true
+  },
   name: {
     type: DataTypes.STRING,
     allowNull: false,
