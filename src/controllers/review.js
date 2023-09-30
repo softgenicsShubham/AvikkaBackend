@@ -36,15 +36,28 @@ const AddReviewAndRating = async (req, res) => {
 };
 const getallreview=async(req,res)=>{
  try{
-    const productid = req.params.productid;
-    const result=await Review.findAll({
+    const productid = req.params.productId;
+    const reviews=await Review.findAll({
         where:{
             product_id: productid 
         }
     })
+        // Calculate the total number of reviews
+        const totalReviews = reviews.length;
+
+        // Calculate the total rating by summing up the 'rating' field for all reviews
+        let totalRating = 0;
+        for (const review of reviews) {
+          totalRating += review.rating;
+        }
+        let Averageproductrating=totalRating/5
+    
     res.status(201).json({
         message: 'get all review detail by id',
-        result: result
+        result: reviews  ,
+        totalReviews: totalReviews,
+        totalRating: Averageproductrating,
+  
     });
 
  }catch(error){
