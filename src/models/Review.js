@@ -12,10 +12,20 @@ const Review = sq.define('review', {
     product_id: {
         type: DataTypes.INTEGER, // Update data type to match the primary key of the 'brand' table
         allowNull: false,
+        references:{
+            model:Products,
+            key:"product_id"
+            
+        }
+
     },
     user_id:{
         type: DataTypes.INTEGER, // Update data type to match the primary key of the 'brand' table
         allowNull: false,
+        references:{
+            model:registration,
+            key:"user_id"
+        }
 
     },
     rating:{
