@@ -1,4 +1,10 @@
 const cetegories = require('../models/Categories')
+const Products=require('../models/products')
+const item=require('../models/item')
+const review=require('../models/Review')
+const  Sequelize  = require('sequelize')
+const { fn, col, literal } = Sequelize;
+Products.hasMany(review, { foreignKey: 'product_id' }); // Define the association
 
 const postCategories = async (req, res) => {
     const categories_name = req.body.categories_name;
@@ -88,4 +94,82 @@ const deleteCategories = async (req, res) => {
     }
 }
 
-module.exports = {postCategories, getCategories, editCategories, deleteCategories}
+
+
+
+// get categories item
+const getcategoriesitem=async(req,res)=>{
+    try {
+        const categoriesitem = req.params.categoriesitem;
+    
+        // Find the brand based on the brand name
+        const cat_item = await item.findOne({
+          where: {
+            item_name: categoriesitem,
+          },
+        });
+    // console.log(cat_item,'brand')
+        if (!cat_item) {
+          return res.status(404).json({ message: 'categories item  not found' });
+        }
+    
+        // // Find all products associated with the categories item
+        const products = await Products.findAll({
+          where: {
+            categories: cat_item.item_name,
+          },
+          include: [
+            {
+              model: review, // Assuming you have a relationship between Products and Review
+            },
+          ],
+        
+        });
+    //     if (!products || products.length === 0) {
+    //         return res.status(404).json({ message: 'No products found for this categories item' });
+    //       }
+      
+    //       // Assuming there is a product_id property in the first product in the list
+    //       const product_id = products[0].product_id;
+      
+    //       // Find the review for the product
+    //       const reviewresult = await review.findAll({
+    //         where: {
+    //           product_id: product_id,
+    //         },
+    //       });
+    //       const totalReviews = reviewresult.length;
+    // // Find the user names who have rated the product
+    // const uniqueUserIds = [...new Set(reviewresult.map((review) => review.user_id))];
+    // const numberOfRaters = uniqueUserIds.length;
+
+    // // Calculate the total rating by summing up the 'rating' field for all reviews
+    // let totalRating = 0;
+    // for (const review of reviewresult) {
+    //   totalRating += review.rating;
+    // }
+    // let Averageproductrating = totalRating / totalReviews
+
+    //       const productreviewData = {
+    //         products: products,
+    //         review: reviewresult,
+    //         totalReviews: totalReviews,
+    //         totalRating: Averageproductrating,
+    //         numberOfRaters: numberOfRaters,
+          
+    //       };
+      
+          res.json(products);
+      
+        //   console.log(productreviewData, 'mergedData');
+            
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+      }
+    
+
+}
+
+
+module.exports = {postCategories, getCategories, editCategories, deleteCategories,getcategoriesitem}

@@ -1,4 +1,5 @@
 const Products = require('../models/products')
+
 const multer = require('multer');
 const path = require('path');
 
@@ -25,7 +26,7 @@ const Addproduct = async (req, res) => {
 
     //   // Access the uploaded file via req.file
     //   const uploadedFile = req.file;
-    upload.fields([{ name: 'product_thumnail_img', maxCount: 10 }, { name: 'ideal_for_img', maxCount: 10 },{name:'work_for_img',maxCount: 1}])(req, res, (err) => {
+    upload.fields([{ name: 'product_thumnail_img', maxCount: 10 }, { name: 'ideal_for_img', maxCount: 10 }, { name: 'work_for_img', maxCount: 1 }])(req, res, (err) => {
       if (err) {
         return res.status(400).json({ message: 'File upload failed' });
       }
@@ -34,22 +35,22 @@ const Addproduct = async (req, res) => {
       //   const productImage = req.files['product_img'][0];
       const thumbnailImage = req.files['product_thumnail_img'][0];
       const ideal_for_img = req.files['ideal_for_img'][0];
-      const work_for_img=req.files['work_for_img'][0];
+      const work_for_img = req.files['work_for_img'][0];
       const imageUrl = `uploads/productthumbnail/${thumbnailImage.filename}`;
       const imageUrl_ideal_for_img = `uploads/productthumbnail/${ideal_for_img.filename}`;
-      const imageUrl_work_for_img=`uploads/productthumbnail/${work_for_img.filename}`
-      console.log(imageUrl_ideal_for_img, 'imageUrl_ideal_for_img')
+      const imageUrl_work_for_img = `uploads/productthumbnail/${work_for_img.filename}`
+      // console.log(imageUrl_ideal_for_img, 'imageUrl_ideal_for_img')
 
       const ideal_for = [];
       ideal_for.push({
         ideal_for_title: req.body.ideal_for_title,
         ideal_for_img: imageUrl_ideal_for_img,
       });
-const product_work_for=[];
-product_work_for.push({
-  work_for_title:req.body.work_for_title,
-  work_for_img:imageUrl_work_for_img
-})
+      const product_work_for = [];
+      product_work_for.push({
+        work_for_title: req.body.work_for_title,
+        work_for_img: imageUrl_work_for_img
+      })
 
       // Create a new product record in the database
       Products.create({
@@ -66,10 +67,10 @@ product_work_for.push({
         count_in_stock: req.body.count_in_stock,
         rating: req.body.rating,
         discount: req.body.discount,
-        highlights:req.body.highlights,
+        highlights: req.body.highlights,
         ideal_for: ideal_for,
-        product_work_for:product_work_for,
-        product_expiry_date:req.body.product_expiry_date
+        product_work_for: product_work_for,
+        product_expiry_date: req.body.product_expiry_date
       });
 
       return res.json({ message: 'Product added successfully', Products });
@@ -80,12 +81,19 @@ product_work_for.push({
   }
 };
 
+
+
+
+
+
+
+
 const getproduct = async (req, res) => {
 
   try {
     const products = await Products.findAll();
     // res.json(products);
-    console.log(products, "pppppppp")
+    // console.log(products, "pppppppp")
 
     return res.status(200).send({
       success: 'success',
@@ -98,6 +106,16 @@ const getproduct = async (req, res) => {
   }
 }
 
+
+
+
+
+
+
+
+
+
+
 const productdetail = async (req, res) => {
   try {
     const productId = req.params.productId;
@@ -106,6 +124,7 @@ const productdetail = async (req, res) => {
       where: {
         product_id: productId
       },
+
     })
 
     product = JSON.parse(JSON.stringify(product))

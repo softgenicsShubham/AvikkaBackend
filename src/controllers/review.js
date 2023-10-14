@@ -1,6 +1,10 @@
 const Review = require('../models/Review')
 const registration = require('../models/registration')
 const multer = require('multer');
+// const { Op } = require('sequelize');
+const  Sequelize  = require('sequelize')
+const { fn, col, literal } = Sequelize;
+
 const path = require('path');
 
 
@@ -33,17 +37,12 @@ const AddReviewAndRating = async (req, res) => {
 
       const { product_id, user_id, rating, review_title, review_comment } = req.body;
 
-      console.log("product_id:", product_id);
-      console.log("user_id:", user_id);
-      console.log("rating:", typeof rating);
-      console.log("review_title:", review_title);
-      console.log("review_comment:", review_comment);
 
 
       const reviewImg = req.files['review_img'][0];
 
 
-      console.log('reviewImg', reviewImg)
+      // console.log('reviewImg', reviewImg)
 
       const imageUrl = `uploads/review_img/${reviewImg.filename}`;
 
@@ -95,34 +94,53 @@ const getallreview = async (req, res) => {
       where: {
         product_id: productid
       },
+
+      attributes: {
+        include: [
+          'review_id',
+          'product_id',
+          'user_id',
+          'rating',
+          'review_title',
+          'review_comment',
+          'review_img',
+          // Add other attributes from the Review model as needed
+          [Sequelize.fn('SUM', Sequelize.col('rating')), 'numberOfRaters'],
+        ],
+      },
+      group: ['review_id'], // Group by review_id to avoid multiple rows in the result
+
       include: [
         {
           model: registration,
           attributes: ['name'],
-
+          // required: false, // Use 'required: false' to perform a LEFT JOIN
         },
-      ]
+      ],
+      raw: true, // Include raw data in the result
 
     })
-    // Calculate the total number of reviews
     const totalReviews = reviews.length;
-    // Find the user names who have rated the product
-    const uniqueUserIds = [...new Set(reviews.map((review) => review.user_id))];
-    const numberOfRaters = uniqueUserIds.length;
-
+console.log(totalReviews,'totalReviews')
+let totalNumberOfRaters = 0;
+for (const review of reviews) {
+  totalNumberOfRaters += review.numberOfRaters;
+}
+// console.log(totalNumberOfRaters); // Total number of raters across all reviews
     // Calculate the total rating by summing up the 'rating' field for all reviews
     let totalRating = 0;
     for (const review of reviews) {
       totalRating += review.rating;
     }
-    let Averageproductrating = totalRating / 5
+    let Averageproductrating = totalRating / totalReviews
+    console.log(Averageproductrating,'Averageproductrating')
 
     res.status(201).json({
       message: 'get all review detail by id',
       result: reviews,
       totalReviews: totalReviews,
       totalRating: Averageproductrating,
-      numberOfRaters: numberOfRaters
+      totalNumberOfRaters:totalNumberOfRaters
     });
 
   } catch (error) {

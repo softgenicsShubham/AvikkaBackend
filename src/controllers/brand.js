@@ -1,5 +1,8 @@
 const Brand = require('../models/Brand');
 const Product=require('../models/products')
+const review=require('../models/Review')
+ Product.hasMany(review, { foreignKey: 'product_id' }); // Define the association
+
 const Addbrand = async (req, res) => {
     try {
         const { brand_name, brand_type } = req.body;
@@ -15,7 +18,7 @@ const Addbrand = async (req, res) => {
             brand_name: brand_name,
             brand_type: brand_type
         });
-        console.log(JSON.parse(JSON.stringify(result)))
+        // console.log(JSON.parse(JSON.stringify(result)))
         res.status(201).json({
             msg: 'success post',
             result: result
@@ -32,7 +35,7 @@ const getbrand= async (req, res) => {
     try{
         const result= await Brand.findAll();
         // res.json(products);
-        console.log(result,"pppppppp")
+        // console.log(result,"pppppppp")
         if (!result) {
             return res.status(404).json({ error: 'Brand not found' });
         }
@@ -59,7 +62,7 @@ const getbrandproduct=async(req,res)=>{
             brand_name: brandName,
           },
         });
-    console.log(brand,'brand')
+    // console.log(brand,'brand')
         if (!brand) {
           return res.status(404).json({ message: 'Brand not found' });
         }
@@ -69,6 +72,12 @@ const getbrandproduct=async(req,res)=>{
           where: {
             brand_id: brand.brand_id,
           },
+          include: [
+            {
+              model: review, // Assuming you have a relationship between Products and Review
+            },
+          ],
+
         });
     
         res.json(products);

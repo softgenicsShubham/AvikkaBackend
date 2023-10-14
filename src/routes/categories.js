@@ -6,5 +6,5 @@ router.post('/categories', categoriesController.postCategories)
 router.get('/categories/all', categoriesController.getCategories)
 router.put('/categories/edit/:id', categoriesController.editCategories)
 router.delete('/categories/delete/:id', categoriesController.deleteCategories)
-
+router.get('/categories/:categoriesitem',categoriesController.getcategoriesitem)
 module.exports = router;

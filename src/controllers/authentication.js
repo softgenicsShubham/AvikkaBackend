@@ -239,10 +239,38 @@ const getverifyotp = async (req, res) => {
 };
 
 
+const userInfo = async (req, res, next) => {
 
+  console.log('INFO -> USER INFO API CALLED')
+  try {
+    let { user_id, mobile_num } = req.userData;
+    console.log(user_id, mobile_num, 'mobile_nummobile_num')
+    let user = await registration.findOne({
+      where: { user_id, mobile_num }
+    });
+
+    user = JSON.parse(JSON.stringify(user))
+    if (!user)
+      return res.status(401).json({ error: "User not found" });
+
+    return res.status(200).json({
+      success: true,
+      message: "User info fetched successfully!",
+      payload: {
+        ...user,
+        auth_token: jwt.sign({ mobile_num: user.mobile_num, user_id: user.user_id }, process.env.JWT_KEY),
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+
+  }
+};
 module.exports = {
   getAuthentication,
-  getverifyotp
+  getverifyotp,
+  userInfo
 };
 
 
