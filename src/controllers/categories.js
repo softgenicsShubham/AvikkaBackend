@@ -108,7 +108,7 @@ const getcategoriesitem=async(req,res)=>{
             item_name: categoriesitem,
           },
         });
-    // console.log(cat_item,'brand')
+    console.log(cat_item,'brand')
         if (!cat_item) {
           return res.status(404).json({ message: 'categories item  not found' });
         }
@@ -116,7 +116,7 @@ const getcategoriesitem=async(req,res)=>{
         // // Find all products associated with the categories item
         const products = await Products.findAll({
           where: {
-            categories: cat_item.item_name,
+            product_categories: cat_item.item_name,
           },
           include: [
             {

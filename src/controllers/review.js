@@ -148,7 +148,25 @@ for (const review of reviews) {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+
+
+const getallmyreviews=async(req,res)=>{
+try{
+  const userId = req.userData.user_id; 
+  const allreviewdata=await Review.findAll({
+    user_id:userId
+  })
+  console.log(allreviewdata,'cartProducts')
+  res.status(200).json({ allreviewdata });
+
+}catch(error){
+  console.error(error);
+  res.status(500).json({ message: 'Internal server error' });
+
+}
+}
 module.exports = {
   AddReviewAndRating,
-  getallreview
+  getallreview,
+  getallmyreviews
 }

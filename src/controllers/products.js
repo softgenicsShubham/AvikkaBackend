@@ -1,5 +1,5 @@
 const Products = require('../models/products')
-
+const Review=require('../models/Review')
 const multer = require('multer');
 const path = require('path');
 
@@ -55,7 +55,7 @@ const Addproduct = async (req, res) => {
       // Create a new product record in the database
       Products.create({
         product_name: req.body.product_name,
-        categories: req.body.categories,
+        product_categories: req.body.categories,
         brand_id: req.body.brand_id,
         product_title: req.body.product_title,
         product_description: req.body.product_description,
@@ -70,7 +70,10 @@ const Addproduct = async (req, res) => {
         highlights: req.body.highlights,
         ideal_for: ideal_for,
         product_work_for: product_work_for,
-        product_expiry_date: req.body.product_expiry_date
+        product_expiry_date: req.body.product_expiry_date,
+        categories_id:req.body.categories_id,
+        subCategories_id:req.body.subCetegories_id,
+        place:req.body.place
       });
 
       return res.json({ message: 'Product added successfully', Products });
@@ -91,7 +94,13 @@ const Addproduct = async (req, res) => {
 const getproduct = async (req, res) => {
 
   try {
-    const products = await Products.findAll();
+    const products = await Products.findAll({
+      include: [
+        {
+          model: Review, // Assuming you have a relationship between Products and Review
+        },
+      ]
+    });
     // res.json(products);
     // console.log(products, "pppppppp")
 

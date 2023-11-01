@@ -1,6 +1,8 @@
 const Brand = require('../models/Brand');
 const Product=require('../models/products')
 const review=require('../models/Review')
+const { Op } = require('sequelize');
+
  Product.hasMany(review, { foreignKey: 'product_id' }); // Define the association
 
 const Addbrand = async (req, res) => {
@@ -91,9 +93,41 @@ const getbrandproduct=async(req,res)=>{
 
 
 
+const sortbydiscount = async (req, res) => {
+  const brandName = req.params.brandName;
+
+  try {
+    const brand = await Brand.findOne({
+      where: {
+        brand_name: brandName,
+      },
+    });
+
+    if (!brand) {
+      return res.status(404).json({ message: 'Brand not found' });
+    }
+
+    const discountProducts = await Product.findAll({
+      order: [['discount', 'DESC']], // Sort by 'discount' in descending order
+      where: {
+        brand_id: brand.brand_id, // Filter products by brand ID
+        discount: {
+          [Op.gt]: 0, // Filter products with a discount greater than 0
+        }
+      }
+    });
+
+    res.status(200).json(discountProducts);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
+
 
 module.exports = {
     Addbrand,
     getbrand,
-    getbrandproduct
+    getbrandproduct,
+    sortbydiscount
 }

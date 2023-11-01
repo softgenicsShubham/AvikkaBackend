@@ -2,6 +2,7 @@ const { sq } = require('../config/db')
 const { Sequelize, DataTypes } = require('sequelize');
 const registration = require('./registration');
 const Products = require('./products');
+const Review = require('./Review');
 
 const Wishlist = sq.define('wishlist', {
     wishlist_id: {
@@ -43,3 +44,5 @@ module.exports = Wishlist;
 
 // Cart.belongsTo(Products, { foreignKey: 'product_id' });
 Wishlist.belongsTo(Products,{foreignKey: 'product_id'})
+Wishlist.hasMany(Review,{foreignKey:'review_id'});
+// Wishlist.hasMany(Products,{foreignKey:'product_id'});

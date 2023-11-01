@@ -6,6 +6,8 @@ const brandapi = require('../controllers/brand')
 router.post('/brand', brandapi.Addbrand)
 router.get('/brand', brandapi.getbrand)
 router.get('/brand/product/:brandName', brandapi.getbrandproduct)
+router.get('/brand/sortbydiscount/:brandName', brandapi.sortbydiscount)
+
 
 
 

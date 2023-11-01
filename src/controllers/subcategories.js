@@ -1,17 +1,18 @@
+const { Products } = require('../models');
 const subCetegories = require('../models/Subcategories');
 
 const postsubCetegories = async (req, res) => {
     const categories_name = req.body.categories_name;
-    const subCetegories_name = req.body.subCetegories_name;
+    const subCategories_name = req.body.subCetegories_name;
     // const subCetegories_id = req.body.subCetegories_id;
 
     try {
-        if (!categories_name || !subCetegories_name  ) {
+        if (!categories_name || !subCategories_name  ) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
         const data = await subCetegories.create({
             categories_name,
-            subCetegories_name,
+            subCategories_name,
             // subCetegories_id,
         })
         res.status(200).send(data);
@@ -76,4 +77,33 @@ const deleteSubCategories = async (req, res) => {
     }
 }
 
-module.exports = { postsubCetegories, getSubCategories, editSubCategories,deleteSubCategories }
+const getSubCategoriesbyname = async (req, res) => {
+    console.log('INFO -> getSubCategoriesbyname INFO API CALLED')
+
+    try {
+        const {name}=req.params
+        console.log(name,'name')
+    
+        const data = await subCetegories.findOne({
+            where:{
+                subCetegories_name:name
+            }
+        })
+        const alldata=await Products.findAll({
+            where:{
+                subCetegories_id:data.subCetegories_id
+            }
+        })
+        console.log(alldata,'alldata')
+        // if (!data) {
+        //     return res.status(400).json({ error: 'subCetegories not found' });
+        // }
+        res.status(200).send(alldata);
+    } catch (error) {
+        console.error('Error creating subCetegories:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
+
+module.exports = { postsubCetegories, getSubCategories, editSubCategories,deleteSubCategories ,getSubCategoriesbyname}

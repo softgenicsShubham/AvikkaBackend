@@ -16,8 +16,8 @@ const registration = sq.define('registration', {
   },
   mobile_num: {
     type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
+    // unique: true,
+     allowNull: false,
   },
   email_id: {
     type: DataTypes.STRING,

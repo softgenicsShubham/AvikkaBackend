@@ -9,6 +9,11 @@ const subCetegories = require('./Subcategories')
 const item = require('./item')
 const Cart = require('./Cart')
 const Wishlist=require('./Wishlist')
+const Homebrandimage=require('./homebrandimage')
+const Hometopbanner=require('./hometopbanner')
+const Address=require('./addresses')
+const Video=require('./Video')
+const Videothumnail=require('./Videothumnail')
 module.exports = {
   Registration,
   Brand,
@@ -20,5 +25,10 @@ module.exports = {
   subCetegories,
   item,
   Cart,
-  Wishlist
+  Wishlist,
+  Homebrandimage,
+  Hometopbanner,
+  Address,
+  Video,
+  Videothumnail
 };

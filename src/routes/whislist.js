@@ -3,9 +3,9 @@ const router = express.Router()
 const whislistapi = require('../controllers/wishlist')
 const { userAuth } = require('../middleware/authmiddleware')
 
-// router.get('/getCartProduct/', userAuth, cartapi.getCartProduct)
+router.get('/getWishlistItems/', userAuth, whislistapi.getWishlistItems)
 router.post('/addProductToWishlist/',userAuth,whislistapi.addProductToWishlist)
-// router.delete('/removeProductFromCart/:product_id', userAuth, cartapi.removeProductFromCart)
+router.delete('/removeProductFromWishlist/:product_id', userAuth, whislistapi.removeProductFromWishlist)
 // router.patch('/updateProductQuantity/', userAuth, cartapi.updateProductQuantity)
 
 module.exports = router;

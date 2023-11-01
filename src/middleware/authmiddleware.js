@@ -16,6 +16,8 @@ exports.userAuth = async (req, res, next) => {
 
     if (!userData) {
       console.log("Token expired!", "unAuthorized")
+      // logger.error(error);
+
     }
 
     req.userData = userData;

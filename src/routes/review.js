@@ -3,6 +3,7 @@ const router = express.Router();
 const Reviewapi = require('../controllers/review')
 
 
+const { userAuth } = require('../middleware/authmiddleware')
 
 
 
@@ -11,6 +12,8 @@ const Reviewapi = require('../controllers/review')
 
 router.post('/review/', Reviewapi.AddReviewAndRating)
 router.get('/review/allreview/:productId', Reviewapi.getallreview)
+router.get('/review/getallmyreviews/',userAuth, Reviewapi.getallmyreviews)
+
 
 
 module.exports = router;

@@ -1,6 +1,8 @@
 const { sq } = require('../config/db')
-const { Sequelize, DataTypes, BelongsTo } = require('sequelize');
+const { Sequelize, DataTypes,BelongsTo } = require('sequelize');
 const Brand=require('./Brand')
+const categories = require('./Categories'); // Import the "cetegories" model
+const subCategories = require('./Subcategories'); // Import the "subCetegories" model
 const Products = sq.define('products', {
     product_id: {
         type: DataTypes.INTEGER,
@@ -13,7 +15,7 @@ const Products = sq.define('products', {
         allowNull: false
     },
 
-    categories: {
+    product_categories: {
 
         type: DataTypes.STRING,
         allowNull: false
@@ -66,12 +68,12 @@ const Products = sq.define('products', {
 
     },
     ideal_for:{
-        type: DataTypes.ARRAY(DataTypes.STRING), // Replace STRING with the appropriate data type for your array elements
+        type: DataTypes.JSON, // Replace STRING with the appropriate data type for your array elements
         allowNull: true
-
+        // ARRAY(DataTypes.STRING)
     },
     product_work_for:{
-        type: DataTypes.ARRAY(DataTypes.STRING), // Replace STRING with the appropriate data type for your array elements
+        type: DataTypes.JSON, // Replace STRING with the appropriate data type for your array elements
         allowNull: true
 
     },
@@ -83,6 +85,29 @@ const Products = sq.define('products', {
     product_expiry_date:{
         type: DataTypes.STRING,
         allowNull: false
+
+    },
+    categories_id:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: categories,
+            key: 'categories_id'
+        }
+
+    },
+    subCategories_id:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model:subCategories,
+            key:'subCategories_id'
+        }
+
+    },
+    place:{
+        type: DataTypes.STRING,
+        allowNull: true,
 
     },
     createdAt: {
@@ -103,8 +128,17 @@ const Products = sq.define('products', {
     freezeTableName: true,
  
 })
+
 module.exports=Products
 
 // Products.belongsTo (sellers,{foreignKey: "sellers_id"})
 Products.belongsTo(Brand,{foreignKey:'brand_id'})
+// Products.belongsTo(cetegories,{foreignKey:'product_id'})
+
+// Products.belongsTo(subCetegories,{foreignKey:'brand_id'})
+
 // Products.belongsToMany(categories,{through:"productcategories", foreignKey:'product_id'})
+// Products.belongsToMany(Color, { through: 'product_colors', foreignKey: 'product_id' });
+// Products.belongsToMany(Quantity, { through: 'product_quantities', foreignKey: 'product_id' });
+// Products.hasMany(Video, { foreignKey: 'product_id' });
+
