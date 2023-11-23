@@ -1,5 +1,6 @@
 const Products = require('../models/products')
-const Review=require('../models/Review')
+const Review = require('../models/Review')
+const Specification=require('../models/specification')
 const multer = require('multer');
 const path = require('path');
 
@@ -26,7 +27,7 @@ const Addproduct = async (req, res) => {
 
     //   // Access the uploaded file via req.file
     //   const uploadedFile = req.file;
-    upload.fields([{ name: 'product_thumnail_img', maxCount: 10 }, { name: 'ideal_for_img', maxCount: 10 }, { name: 'work_for_img', maxCount: 1 }])(req, res, (err) => {
+    upload.fields([{ name: 'product_thumnail_img', maxCount: 10 }, { name: 'ideal_for_img', maxCount: 10 }, { name: 'work_for_img', maxCount: 1 }, { name:'product_detail_allimage', maxCount: 10 }])(req, res, (err) => {
       if (err) {
         return res.status(400).json({ message: 'File upload failed' });
       }
@@ -34,6 +35,19 @@ const Addproduct = async (req, res) => {
       // Access the uploaded files via req.files
       //   const productImage = req.files['product_img'][0];
       const thumbnailImage = req.files['product_thumnail_img'][0];
+      const allimages = req.files['product_detail_allimage']
+      // console.log(allimages,'allimages')
+      if (!allimages) {
+        return res.status(400).json({ message: 'No files were uploaded for product_thumbnail_img' });
+      }
+      //     // const firstThumbnailImage = thumbnailImage[0];
+
+      // // Access and work with all uploaded thumbnail images
+      const allimagesUrls = allimages.map((allImage) => {
+        return `uploads/productthumbnail/${allImage.filename}`;
+      });
+// console.log(allimagesUrls,'allimagesUrls')
+
       const ideal_for_img = req.files['ideal_for_img'][0];
       const work_for_img = req.files['work_for_img'][0];
       const imageUrl = `uploads/productthumbnail/${thumbnailImage.filename}`;
@@ -71,9 +85,12 @@ const Addproduct = async (req, res) => {
         ideal_for: ideal_for,
         product_work_for: product_work_for,
         product_expiry_date: req.body.product_expiry_date,
-        categories_id:req.body.categories_id,
-        subCategories_id:req.body.subCetegories_id,
-        place:req.body.place
+        categories_id: req.body.categories_id,
+        subCategories_id: req.body.subCetegories_id,
+        place: req.body.place,
+        product_detail_allimage:allimagesUrls,
+        product_color:req.body.product_color,
+        product_quantity:req.body.product_quantity
       });
 
       return res.json({ message: 'Product added successfully', Products });
@@ -94,10 +111,29 @@ const Addproduct = async (req, res) => {
 const getproduct = async (req, res) => {
 
   try {
+    const Featured = await Products.findAll({
+      where: {
+        place: 'Featured'
+      }
+    })
+    const Fashwash = await Products.findAll({
+      where: {
+        product_categories: 'Face Wash'
+      }
+    })
+    const primer = await Products.findAll({
+      where: {
+        product_categories: 'Primer'
+      }
+    })
+    // console.log(primer, 'primer')
     const products = await Products.findAll({
       include: [
         {
           model: Review, // Assuming you have a relationship between Products and Review
+        },
+        {
+          model: Specification, // Assuming you have a relationship between Products and Review
         },
       ]
     });
@@ -107,6 +143,9 @@ const getproduct = async (req, res) => {
     return res.status(200).send({
       success: 'success',
       result: products,
+      Featured: Featured,
+      Fashwash: Fashwash,
+      primer: primer
     });
 
   } catch (error) {
@@ -138,7 +177,7 @@ const productdetail = async (req, res) => {
 
     product = JSON.parse(JSON.stringify(product))
 
-    product.ideal_for = JSON.parse(JSON.stringify(product.ideal_for))
+    // product.ideal_for = JSON.parse(JSON.stringify(product.ideal_for))
 
 
     return res.status(200).send({

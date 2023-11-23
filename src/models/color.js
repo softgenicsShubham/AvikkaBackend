@@ -1,6 +1,6 @@
 // Color.js
-const { DataTypes } = require('sequelize');
-const sq = require('../config/db');
+const { Sequelize, DataTypes } = require('sequelize');
+const { sq } = require('../config/db')
 
 const Color = sq.define('color', {
     color_id: {
@@ -10,6 +10,10 @@ const Color = sq.define('color', {
         primaryKey: true,
     },
     color_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    color_code: {
         type: DataTypes.STRING,
         allowNull: false,
     },

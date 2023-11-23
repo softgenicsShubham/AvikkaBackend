@@ -1,8 +1,13 @@
 const { sq } = require('../config/db')
-const { Sequelize, DataTypes,BelongsTo } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const Brand=require('./Brand')
 const categories = require('./Categories'); // Import the "cetegories" model
+// const ProductOffer = require('./productoffer'); // Import the "ProductOffer" model
+// const Offer = require('./offer'); 
+const Color = require('./color'); // Import the "Color" model
+// const Specification=require('./specification')
 const subCategories = require('./Subcategories'); // Import the "subCetegories" model
+// const OrderItem=require('./OrderItem')
 const Products = sq.define('products', {
     product_id: {
         type: DataTypes.INTEGER,
@@ -19,8 +24,7 @@ const Products = sq.define('products', {
 
         type: DataTypes.STRING,
         allowNull: false
-    }
-    ,
+    },
     brand_id: {
         type: DataTypes.INTEGER, // Update data type to match the primary key of the 'brand' table
         allowNull: false,
@@ -42,6 +46,10 @@ const Products = sq.define('products', {
         type: DataTypes.STRING,
         allowNull: false
 
+    },
+    product_detail_allimage:{
+        type: DataTypes.JSON,
+        allowNull: false  
     },
     product_ad: {
         type: DataTypes.BOOLEAN,
@@ -110,6 +118,14 @@ const Products = sq.define('products', {
         allowNull: true,
 
     },
+    product_color:{
+        type: DataTypes.JSON,
+        allowNull: true,
+    },
+    product_quantity:{
+        type: DataTypes.JSON,
+        allowNull: true,
+    },
     createdAt: {
         type: DataTypes.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), // Set the default value to the current timestamp
@@ -124,21 +140,19 @@ const Products = sq.define('products', {
 },
 
 {
-    timestamps: false,
     freezeTableName: true,
  
 })
-
 module.exports=Products
 
 // Products.belongsTo (sellers,{foreignKey: "sellers_id"})
 Products.belongsTo(Brand,{foreignKey:'brand_id'})
-// Products.belongsTo(cetegories,{foreignKey:'product_id'})
+// Products.belongsTo(Specification, { foreignKey: 'product_id' });
 
-// Products.belongsTo(subCetegories,{foreignKey:'brand_id'})
+// ...
 
-// Products.belongsToMany(categories,{through:"productcategories", foreignKey:'product_id'})
-// Products.belongsToMany(Color, { through: 'product_colors', foreignKey: 'product_id' });
-// Products.belongsToMany(Quantity, { through: 'product_quantities', foreignKey: 'product_id' });
-// Products.hasMany(Video, { foreignKey: 'product_id' });
+// Define the many-to-many relationship with Color
 
+// ...
+// Products.hasMany(OrderItem);
+// OrderItem.belongsTo(Products);

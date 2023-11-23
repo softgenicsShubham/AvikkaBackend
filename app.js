@@ -6,14 +6,19 @@ const body_parser = require('body-parser')
 const mainroute = require('./src/routes/index')
 const { testDbConnection } = require('./src/config/db')
 // const { Brand } = require('./src/models/index')
-
+const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 3000;
 
 testDbConnection()
 
 
-
+app.use(cors({origin:"*",methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+credentials: true,
+exposedHeaders: ['x-auth-token']}));
+app.use(express.json())
+// dotenv.config({path:'config.env'}
+// )
 
 
 

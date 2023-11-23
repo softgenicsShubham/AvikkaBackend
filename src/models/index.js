@@ -8,12 +8,24 @@ const Categories = require('./Categories')
 const subCetegories = require('./Subcategories')
 const item = require('./item')
 const Cart = require('./Cart')
-const Wishlist=require('./Wishlist')
-const Homebrandimage=require('./homebrandimage')
-const Hometopbanner=require('./hometopbanner')
-const Address=require('./addresses')
-const Video=require('./Video')
-const Videothumnail=require('./Videothumnail')
+const Wishlist = require('./Wishlist')
+const Homebrandimage = require('./homebrandimage')
+const Hometopbanner = require('./hometopbanner')
+const Address = require('./addresses')
+const Video = require('./Video')
+const Videothumnail = require('./Videothumnail')
+const Offer = require('./offer')
+const ProductOffer = require('./productoffer')
+const Color = require('./color')
+const Quantity = require('./Quantity')
+const Specification = require('./specification')
+const orderItem = require('./OrderItem')
+
+
+
+
+
+
 module.exports = {
   Registration,
   Brand,
@@ -30,5 +42,12 @@ module.exports = {
   Hometopbanner,
   Address,
   Video,
-  Videothumnail
+  Videothumnail,
+  Offer,
+  ProductOffer,
+  Color,
+  Quantity,
+  Specification,
+  orderItem,
+
 };

@@ -1,6 +1,6 @@
 const { Products } = require('../models');
 const subCetegories = require('../models/Subcategories');
-
+const categories=require('../models/Categories')
 const postsubCetegories = async (req, res) => {
     const categories_name = req.body.categories_name;
     const subCategories_name = req.body.subCetegories_name;
@@ -84,17 +84,18 @@ const getSubCategoriesbyname = async (req, res) => {
         const {name}=req.params
         console.log(name,'name')
     
-        const data = await subCetegories.findOne({
+        const data = await categories.findOne({
             where:{
-                subCetegories_name:name
+                categories_name:name
             }
         })
+        console.log(data,'datadatadata')
         const alldata=await Products.findAll({
             where:{
-                subCetegories_id:data.subCetegories_id
+                categories_id:data.categories_id
             }
         })
-        console.log(alldata,'alldata')
+        // console.log(alldata,'alldata')
         // if (!data) {
         //     return res.status(400).json({ error: 'subCetegories not found' });
         // }

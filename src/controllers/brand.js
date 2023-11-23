@@ -1,11 +1,14 @@
 const Brand = require('../models/Brand');
 const Product=require('../models/products')
 const review=require('../models/Review')
+const Carousel=require('../models/carousel')
 const { Op } = require('sequelize');
 
  Product.hasMany(review, { foreignKey: 'product_id' }); // Define the association
 
 const Addbrand = async (req, res) => {
+  console.log('INFO -> Addbrand INFO API CALLED')
+
     try {
         const { brand_name, brand_type } = req.body;
 // console.log(brand_name,'bbbb')
@@ -68,7 +71,12 @@ const getbrandproduct=async(req,res)=>{
         if (!brand) {
           return res.status(404).json({ message: 'Brand not found' });
         }
-    
+    const carouseldata=await Carousel.findAll({
+      where:{
+        brand_name:brandName
+      }
+
+    })
         // Find all products associated with the brand
         const products = await Product.findAll({
           where: {
@@ -78,11 +86,13 @@ const getbrandproduct=async(req,res)=>{
             {
               model: review, // Assuming you have a relationship between Products and Review
             },
+            
           ],
 
         });
+
     
-        res.json(products);
+        res.json({ products, carouseldata });
       } catch (error) {
         console.error('Error fetching products:', error);
         res.status(500).json({ message: 'Internal Server Error' });
@@ -116,7 +126,7 @@ const sortbydiscount = async (req, res) => {
         }
       }
     });
-
+console.log(discountProducts)
     res.status(200).json(discountProducts);
   } catch (error) {
     console.error('Error fetching products:', error);

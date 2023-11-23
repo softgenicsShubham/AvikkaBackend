@@ -16,6 +16,17 @@ const Hometopbannerimage=require('./hometopbanner')
 const Address=require('./address')
 const Video=require('./video')
 const videothumbnail=require('./Videothumnail')
+const offer=require('./offer')
+const color=require('./color')
+const quantity=require('./quantity')
+const specification=require('./specification')
+const order=require('./order')
+const search=require('./search')
+const pay=require('./payment')
+
+
+
+
 
 router.use('/', authentication)
 router.use('/', brand)
@@ -32,6 +43,22 @@ router.use('/', Hometopbannerimage)
 router.use('/', Address)
 router.use('/',Video)
 router.use('/',videothumbnail)
+router.use('/',offer)
+router.use('/',Homebrandimage)
+router.use('/',color)
+router.use('/',quantity)
+router.use('/',specification)
+router.use('/',order)
+router.use('/',search)
+router.use('/',pay)
+
+
+
+
+
+
+
+
 
 
 
