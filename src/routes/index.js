@@ -23,6 +23,8 @@ const specification=require('./specification')
 const order=require('./order')
 const search=require('./search')
 const pay=require('./payment')
+const seller=require('./seller');
+const referral=require('./referral');
 
 
 
@@ -51,14 +53,8 @@ router.use('/',specification)
 router.use('/',order)
 router.use('/',search)
 router.use('/',pay)
-
-
-
-
-
-
-
-
+router.use('/',seller);
+router.use('/',referral);
 
 
 
