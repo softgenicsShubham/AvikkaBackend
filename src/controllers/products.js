@@ -18,6 +18,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const Addproduct = async (req, res) => {
+  console.log('api called')
   try {
     // Handle file upload using multer
     // upload.single('product_image')(req, res, (err) => {

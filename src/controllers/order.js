@@ -23,7 +23,9 @@ const generate_order_id = () => {
 const create_order = async (req, res) => {
 
     const order_id = generate_order_id();
-    console.log(req.body.Subtotal, 'reqbody')
+    console.log(req.body, 'reqbody')
+    console.log(req.body.addressToSend, 'reqbody')
+
     const currentDate = new Date();
     const expectedDeliveryDate = new Date(currentDate.setDate(currentDate.getDate() + 7));
     console.log(expectedDeliveryDate,'expectedDeliveryDate')
@@ -33,9 +35,9 @@ const create_order = async (req, res) => {
         const orderdata = await order.create({
             order_id: order_id,
             CustomerAddress:req.body.addressToSend,
-            PaymentMethod:'upi',
-            TransactionID:'ph12356748',
-            PaymentStatus:'confirmed',
+            PaymentMethod:req.body.paymentInstrument[0].cardType,
+            TransactionID:req.body.transactionId,
+            PaymentStatus:req.body.state,
             OrderStatus:"confirmed",
             ShippingCost:0,
             TrackingNumber:4567894321,

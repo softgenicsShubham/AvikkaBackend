@@ -3,8 +3,11 @@ const dotenv = require('dotenv').config;
 // const mydb = require('./src/config/db')
 const jwt = require('jsonwebtoken');
 const body_parser = require('body-parser')
-const mainroute = require('./src/routes/index')
+
+const mainroute = require('./src/routes')
+
 const { testDbConnection } = require('./src/config/db')
+
 // const { Brand } = require('./src/models/index')
 const cors = require("cors");
 const app = express();
@@ -25,6 +28,7 @@ app.use(express.json())
 // Parse JSON-encoded bodies
 app.use(body_parser.json());
 app.use(express.static('./public'));
+
 
 // Parse URL-encoded bodies
 app.use(body_parser.urlencoded({ extended: true }));

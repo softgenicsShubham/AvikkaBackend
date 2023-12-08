@@ -21,7 +21,7 @@ const Quantity = require('./Quantity')
 const Specification = require('./specification')
 const orderItem = require('./OrderItem')
 
-
+const bank_detail=require('./bank_detail')
 
 
 
@@ -49,5 +49,5 @@ module.exports = {
   Quantity,
   Specification,
   orderItem,
-
+  bank_detail
 };

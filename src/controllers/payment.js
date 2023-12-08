@@ -79,9 +79,9 @@ const pay=async(req,res,next)=>{
       "merchantTransactionId": tx_uuid,
       "merchantUserId": "MUID123",
       "amount": req.body.Subtotal*100,
-      "redirectUrl": "http://192.168.1.7:3000/pay-return-url/",
+      "redirectUrl": "http://192.168.1.4:3000/pay-return-url/",
       "redirectMode": "POST",
-      "callbackUrl": "http://192.168.1.7:3000/pay-return-url/",
+      "callbackUrl": "http://192.168.1.4:3000/pay-return-url/",
       "mobileNumber": req.body.addressToSend.contact_number,
       "paymentInstrument": {
         "type": "PAY_PAGE"
@@ -180,7 +180,7 @@ const paymentreturn=async(req,res)=>{
   console.log("paymentreturn api called")
     if (req.body.code == 'PAYMENT_SUCCESS' && req.body.merchantId && req.body.transactionId && req.body.providerReferenceId) {
 
-      console.log(req.body)
+      // console.log(req.body)
         //++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // 1.In the live please match the amount you get byamount you send also so that hacker can't pass static value.
         // 2.Don't take Marchent ID directly validate it with yoir Marchent ID
@@ -215,11 +215,20 @@ const paymentreturn=async(req,res)=>{
             //{PLease add your code.}
             //+++++++++++++++++++++++++++++++++++++++++++++++++
             //RETURN TO VIEW
-            //+++++++++++++++++++++++++++++++++++++++++++++++++
-            //console.log(response);
+            //+++++++++++++++++++++++++++++++++++++++++++++++++response
+            //console.log();
             // res.render('index', { page_respond_data: JSON.stringify(response.data) });
-            res.send({ page_respond_data: JSON.stringify(response.data) })
+            // console.log(response.data,'response.data')
+
+
+            
+
+  
+
+
+            // res.send({ page_respond_data: JSON.stringify(response.data) })
             // res.send({ page_respond_data: responseData });
+            res.send(`<title>${JSON.stringify(response.data)}</title>`);
 
           }).catch(function (error) {
             // res.render('index', { page_respond_data: JSON.stringify(error) });
