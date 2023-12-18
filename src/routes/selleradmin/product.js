@@ -11,6 +11,10 @@ router.get('/getproduct',productadminapi.getproduct)
 router.get('/getallsellerproduct',loginsellerauth,productadminapi.gettotalindivisualproduct)
 router.get('/sellergetproduct',loginsellerauth,productadminapi.sellergetproduct)
 router.get('/sellergetproductid/:id',loginsellerauth,productadminapi.sellergetproductid)
+router.patch('/editproduct/:id',loginsellerauth,productadminapi.editproduct)
+router.delete('/deleteproduct/:id',loginsellerauth,productadminapi.deleteproduct)
+
+
 
 
 

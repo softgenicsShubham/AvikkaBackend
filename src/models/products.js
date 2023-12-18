@@ -130,6 +130,10 @@ const Products = sq.define('products', {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
+    newlaunchage_product: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+    },
     createdAt: {
         type: DataTypes.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), // Set the default value to the current timestamp

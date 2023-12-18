@@ -1,8 +1,12 @@
 const Products = require('../models/products')
 const Review = require('../models/Review')
 const Specification=require('../models/specification')
+const Brand=require('../models/Brand')
 const multer = require('multer');
 const path = require('path');
+const  Sequelize  = require('sequelize')
+const { fn, col, literal } = Sequelize;
+const { Op } = require('sequelize');
 
 // ...
 
@@ -192,8 +196,196 @@ const productdetail = async (req, res) => {
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
+
+
+
+
+
+
+
+const fillterDataget = async (req, res) => {
+  try {
+      const {  option ,brandName} = req.body;
+      let modifiedProducts = [];
+      console.log(req.body,'req.bodyreq.bodyreq.body');
+
+      //  // Calculate the date 20 days ago
+      //  const twentyDaysAgo = new Date();
+      //  twentyDaysAgo.setDate(twentyDaysAgo.getDate() - 20);
+      //  console.log("date",twentyDaysAgo.setDate(twentyDaysAgo.getDate() - 20))
+
+      // console.log(req.user.mobile_num);
+      const brandid=await Brand.findOne({
+        where:{
+          brand_name:brandName
+        }
+      })
+      
+      console.log(brandid,'req.bodyreq.bodyreq.body');
+
+     if (option === "highPrice") {
+
+         
+      const filteredProducts = await Products.findAll({
+        where: {
+          brand_id: brandid.brand_id
+        },
+        order: [['product_price', 'DESC']]
+      });
+      // console.log(filteredProducts,'filteredProducts')
+
+          const newProducts = filteredProducts.filter(
+              (product) => !modifiedProducts.some((existingProduct) => existingProduct.product_id === product.product_id)
+          );
+
+          modifiedProducts = [...modifiedProducts, ...newProducts];
+          console.log(modifiedProducts,'modifiedProducts')
+          res.status(200).send(modifiedProducts);
+
+      } else if (option === "lowPrice") {
+          const filteredProducts = await Products.findAll({
+            where: {
+              brand_id: brandid.brand_id
+            },
+              order: [['product_price', 'ASC']],
+          });
+
+          const newProducts = filteredProducts.filter(
+              (product) => !modifiedProducts.some((existingProduct) => existingProduct.product_id === product.product_id)
+          );
+
+          modifiedProducts = [...modifiedProducts, ...newProducts];
+          res.status(200).send(modifiedProducts);
+
+      }else if (option === "discount") {
+          const filteredProducts = await Products.findAll({
+            where: {
+              brand_id: brandid.brand_id
+            },
+              order: [['discount', 'DESC']],
+          });
+
+          const newProducts = filteredProducts.filter(
+              (product) => !modifiedProducts.some((existingProduct) => existingProduct.product_id === product.product_id)
+          );
+
+          modifiedProducts = [...modifiedProducts, ...newProducts];
+          res.status(200).send(modifiedProducts);
+
+      }else if (option === 'AverageRating') {
+        const ratingQuery = await Review.findAll({
+          attributes: [
+            'product_id',
+            [Sequelize.fn('AVG', Sequelize.col('rating')), 'averageRating']
+          ],
+          group: ['product_id'],
+          raw: true,
+        });
+        
+        const productIdsWithAverageRating = ratingQuery.map((rating) => ({
+          productId: rating.product_id,
+          averageRating: parseFloat(rating.averageRating),
+        }));
+        
+        // Your existing code for filtered products
+        const filteredProducts = await Products.findAll({
+          where: {
+            brand_id: brandid.brand_id
+          }
+        });
+        
+        // Find the intersection of product IDs
+        const commonProductIds = filteredProducts
+          .filter(product => productIdsWithAverageRating.some(ratingProduct => ratingProduct.productId === product.id))
+          .map(product => product.id);
+        
+        // Filter products based on common product IDs
+        const modifiedProducts = filteredProducts.filter(product => commonProductIds.includes(product.id));
+        
+        // Add new products to modifiedProducts
+        const newProducts = filteredProducts.filter(
+          (product) => !modifiedProducts.some((existingProduct) => existingProduct.product_id === product.product_id)
+        );
+        
+        // Combine products with their average ratings only for matched products
+        const updatedModifiedProducts = modifiedProducts
+          .map(product => {
+            const averageRatingObj = productIdsWithAverageRating.find(ratingProduct => ratingProduct.productId === product.id);
+            return {
+              ...product.dataValues,
+              averageRating: averageRatingObj ? averageRatingObj.averageRating : null,
+            };
+          })
+          .concat(newProducts); // Concatenate new products without average ratings
+        
+        // Sort the products by average rating in ascending order
+        updatedModifiedProducts.sort((a, b) => {
+          return (a.averageRating || 0) - (b.averageRating || 0);
+        });
+        
+        // Now, updatedModifiedProducts contains both modified products and new products with average ratings, ordered by average rating in ascending order
+        // console.log(updatedModifiedProducts);
+        // res.status(200).send(updatedModifiedProducts);
+        
+        // Now, updatedModifiedProducts contains both modified products and new products with average ratings for matched products
+        console.log(updatedModifiedProducts,'updatedModifiedProductsupdatedModifiedProducts');
+        // res.status(200).send(updatedModifiedProducts);
+        
+        res.status(200).send(updatedModifiedProducts);
+      }
+  } catch (error) {
+      console.error("Error in fillterDataget:", error);
+      res.status(500).send("Internal Server Error");
+  }
+};
+
+
+
+const applyfilter=async(req,res)=>{
+  try {
+    const { brandName, categories, discounts, priceRange } = req.body;
+console.log(req.body,'req.body')
+    const filter = {};
+
+    // Apply filters based on request parameters
+    if (brandName) {
+      // Assuming you have a Brand model with a 'name' column
+      const brand = await Brand.findOne({ where: { brand_name: brandName } });
+      if (brand) {
+        filter.brand_id = brand.brand_id;
+      }
+    }
+
+    if (categories && categories.length > 0) {
+      filter.product_categories = { [Op.in]: categories };
+    }
+
+    if (discounts && discounts.length > 0) {
+      filter.discount = { [Op.in]: discounts };
+    }
+
+    if (priceRange && priceRange.min !== undefined && priceRange.max !== undefined) {
+      filter.product_price = { [Op.between]: [priceRange.min, priceRange.max] };
+    }
+
+    // Use findAll with the filter conditions
+    const filteredProducts = await Products.findAll({
+      where: filter,
+     
+    });
+console.log(filteredProducts,'filteredProductsfilteredProducts')
+    res.json(filteredProducts);
+  } catch (error) {
+    console.error('Error filtering products:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+
 module.exports = {
   Addproduct,
   getproduct,
-  productdetail
+  productdetail,
+  fillterDataget,
+  applyfilter
 }

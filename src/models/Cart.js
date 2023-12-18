@@ -15,7 +15,8 @@ const Cart = sq.define('cart', {
         allowNull: false,
         references: {
             model: registration,
-            key: 'user_id'
+            key: 'user_id',
+            onDelete: 'CASCADE',
         }
     },
     product_id: {

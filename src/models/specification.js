@@ -30,6 +30,10 @@ const Specification = sq.define('Specification', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  type: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   product_id: {
     type: DataTypes.INTEGER,
     allowNull: false,

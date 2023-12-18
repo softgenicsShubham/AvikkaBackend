@@ -126,6 +126,20 @@ const FAST2SMS_API_KEY = 'jr3OEi8MvxyBd5FeNPGW91Qm0XcgfpHoIbDu4YCLAKawh6Jq2VX29I
 //   getverifyotp
 // };
 
+const referal_code_get = () => {
+  // Fixed prefix
+  const prefix = "AV";
+
+  // Generate random numbers for the remaining parts
+  const random1 = Math.floor(Math.random() * 100000);
+  const random2 = Math.floor(Math.random() * 1000000);
+
+  // Concatenate the fixed prefix and random numbers to form the order ID
+  const referal_code = `${prefix}${random1}${random2}`;
+
+  return referal_code;
+}
+
 
 const registration = require('../models/registration');
 const jwt = require('jsonwebtoken');
@@ -198,15 +212,18 @@ const getverifyotp = async (req, res) => {
 
       if (!existingUser) {
         // User does not exist; create a new user and log them in
+        let referal_code = referal_code_get(); // Generate the referral code
+
         let user = await registration.create({
           name: 'GUEST',
           mobile_num: mobilenumber,
           email_id: null,
           gender: null,
           dob: null,
+          referal_code: referal_code
         });
         user = JSON.parse(JSON.stringify(user))
-        const payload = { mobile_num: user?.mobile_num, user_id: user?.user_id };
+        const payload = { mobile_num: user?.mobile_num, user_id: user?.user_id, referal_code: user?.referal_code };
         const token = jwt.sign(payload, process.env.JWT_KEY);
         user.auth_token = token;
 
@@ -218,7 +235,7 @@ const getverifyotp = async (req, res) => {
 
       } else {
         existingUser = JSON.parse(JSON.stringify(existingUser))
-        const payload = { mobile_num: existingUser?.mobile_num, user_id: existingUser?.user_id };
+        const payload = { mobile_num: existingUser?.mobile_num, user_id: existingUser?.user_id, referal_code: existingUser?.referal_code };
         const token = jwt.sign(payload, process.env.JWT_KEY);
         existingUser.auth_token = token;
         res.status(200).json({
@@ -268,63 +285,63 @@ const userInfo = async (req, res, next) => {
   }
 };
 
-const updateprofile=async(req,res)=>{
-    console.log('INFO -> updateuserinfo API CALLED');
-  
-    const {
-      email_id, // The ID of the address to update
-      name,
-      mobile_num,
-      gender,
-      dob,
-    } = req.body;
+const updateprofile = async (req, res) => {
+  console.log('INFO -> updateuserinfo API CALLED');
+
+  const {
+    email_id, // The ID of the address to update
+    name,
+    mobile_num,
+    gender,
+    dob,
+  } = req.body;
   console.log(req.body)
-    // Check if addressId is provided
-  
-  
-    try {
-      // All validation passed, proceed to update the address
-      const user_id = req.userData.user_id; // Adjust this based on your authentication mechanism
+  // Check if addressId is provided
+
+
+  try {
+    // All validation passed, proceed to update the address
+    const user_id = req.userData.user_id; // Adjust this based on your authentication mechanism
     //   const parts = dob.split('-');
     // const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
 
-      const updateData = {
-        email_id, 
-        name,
-        mobile_num,
-        gender,
-        dob:dob
-        };
-  
-  
-      // Find and update the address in the database
-      const updatedprofile = await registration.findOne(
-        { 
-            where:{
-                user_id: user_id
-            }
-         }, // You might want to include user_id to ensure the address belongs to the user
-        // updateData,
-        // { new: true }
-      );
-  
-      if (!updatedprofile) {
-        return res.status(404).json({ error: 'userid not found or you do not have permission to update it.' });
-      }
-      updatedprofile.set(updateData);
+    const updateData = {
+      email_id,
+      name,
+      mobile_num,
+      gender,
+      dob: dob
+    };
+
+
+    // Find and update the address in the database
+    const updatedprofile = await registration.findOne(
+      {
+        where: {
+          user_id: user_id
+        }
+      }, // You might want to include user_id to ensure the address belongs to the user
+      // updateData,
+      // { new: true }
+    );
+
+    if (!updatedprofile) {
+      return res.status(404).json({ error: 'userid not found or you do not have permission to update it.' });
+    }
+    updatedprofile.set(updateData);
     //   Object.assign(updatedAddress,updateData);
 
-      // Save the updated address to the database
-      await updatedprofile.save();
-  
+    // Save the updated address to the database
+    await updatedprofile.save();
 
-      console.log(updatedprofile, 'updatedAddress');
-      res.status(200).json(updatedprofile);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Failed to update the userinfo.' });
-    }
-  };
+
+    console.log(updatedprofile, 'updatedAddress');
+    res.status(200).json(updatedprofile);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to update the userinfo.' });
+  }
+};
 
 
 module.exports = {

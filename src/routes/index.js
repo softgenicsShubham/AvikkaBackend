@@ -31,6 +31,7 @@ const pay = require('./payment')
 const add_bank_detail = require('./bank_details')
 const seller=require('./seller');
 
+const referral=require('./referral');
 
 
 
@@ -67,6 +68,7 @@ router.use('/', pay)
 router.use('/', add_bank_detail)
 router.use('/',seller);
 
+router.use('/',referral);
 
 
 
