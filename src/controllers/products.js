@@ -179,7 +179,12 @@ const productdetail = async (req, res) => {
       },
 
     })
-
+let branddetails=await Brand.findOne({
+  where:{
+    brand_id:product.brand_id
+  }
+})
+console.log(branddetails,'branddetailsbranddetails')
     product = JSON.parse(JSON.stringify(product))
 
     // product.ideal_for = JSON.parse(JSON.stringify(product.ideal_for))
@@ -188,6 +193,8 @@ const productdetail = async (req, res) => {
     return res.status(200).send({
       success: 'success',
       result: product,
+      brand:branddetails
+      
     });
 
 

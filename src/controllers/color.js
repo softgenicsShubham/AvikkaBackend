@@ -20,6 +20,23 @@ const Addcolor=async(req,res)=>{
         res.status(500).json({ message: 'Error creating color and linking products' });
     }
 }
+const getcolor=async(req,res)=>{
+    console.log('INFO -> getcolor INFO API CALLED')
+
+    // const { colorname,colorcode} = req.body;
+
+    try{
+
+        const getcolor=await color.findAll()
+      return res.json(getcolor);
+
+    }catch(error){
+        console.error(error);
+        res.status(500).json({ message: 'Error getcolor color and linking products' });
+    }
+}
+
 module.exports={
-    Addcolor
+    Addcolor,
+    getcolor
 }
