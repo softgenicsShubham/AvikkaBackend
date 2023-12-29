@@ -32,7 +32,7 @@ const Addproduct = async (req, res) => {
 
     //   // Access the uploaded file via req.file
     //   const uploadedFile = req.file;
-    upload.fields([{ name: 'product_thumnail_img', maxCount: 10 }, { name: 'ideal_for_img', maxCount: 10 }, { name: 'work_for_img', maxCount: 1 }, { name:'product_detail_allimage', maxCount: 10 }])(req, res, (err) => {
+    upload.fields([{ name: 'product_thumnail_img', maxCount: 10 }, { name: 'ideal_for_img', maxCount: 10 }, { name: 'work_for_img', maxCount: 1 }, { name:'product_detail_allimage', maxCount: 10 },{name:'product_description_allimg',maxCount: 10 }])(req, res, (err) => {
       if (err) {
         return res.status(400).json({ message: 'File upload failed' });
       }
@@ -49,6 +49,20 @@ const Addproduct = async (req, res) => {
 
       // // Access and work with all uploaded thumbnail images
       const allimagesUrls = allimages.map((allImage) => {
+        return `uploads/productthumbnail/${allImage.filename}`;
+      });
+
+
+      const product_dis_allimg=req.files['product_description_allimg']
+
+
+      if (!product_dis_allimg) {
+        return res.status(400).json({ message: 'No files were uploaded for product_thumbnail_img' });
+      }
+      //     // const firstThumbnailImage = thumbnailImage[0];
+
+      // // Access and work with all uploaded thumbnail images
+      const product_dis_allimgurl = product_dis_allimg.map((allImage) => {
         return `uploads/productthumbnail/${allImage.filename}`;
       });
 // console.log(allimagesUrls,'allimagesUrls')
@@ -95,7 +109,8 @@ const Addproduct = async (req, res) => {
         place: req.body.place,
         product_detail_allimage:allimagesUrls,
         product_color:req.body.product_color,
-        product_quantity:req.body.product_quantity
+        product_quantity:req.body.product_quantity,
+        product_description_allimg:product_dis_allimgurl
       });
 
       return res.json({ message: 'Product added successfully', Products });
