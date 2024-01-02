@@ -47,7 +47,7 @@ const Addproduct = async (req, res) => {
       const allimagesUrls = allimages.map((allImage) => {
         return `uploads/productthumbnail/${allImage.filename}`;
       });
-console.log(allimagesUrls,'allimagesUrls')
+// console.log(allimagesUrls,'allimagesUrls')
 
 
 const product_dis_allimg=req.files['product_description_allimg']

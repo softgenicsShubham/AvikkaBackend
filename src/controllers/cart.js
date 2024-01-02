@@ -17,7 +17,7 @@ const getCartProduct = async (req, res) => {
         });
 
         // If cartProducts is an array of cart items, you can send it as a JSON response
-        console.log(cartProducts,'cartProducts')
+        // console.log(cartProducts,'cartProducts')
         res.status(200).json({ cartProducts });
     } catch (error) {
         console.log(error);
@@ -34,7 +34,7 @@ const addProductToCart = async (req, res) => {
         const userId = req.userData.user_id; // Adjust this based on your authentication mechanism
         // Assuming you receive the product_id and quantity in the request body
         const { product_id, quantity } = req.body;
-console.log(product_id, quantity,'product_id, quantity')
+// console.log(product_id, quantity,'product_id, quantity')
         // Check if the product with the given product_id exists
         const iscartitem = await Cart.findOne({
             where: {
@@ -73,7 +73,7 @@ const removeProductFromCart = async (req, res) => {
       const  product_id =req.params.product_id
         // Assuming you receive the product_id in the request body
         // const { product_id } = req.body;
-console.log(product_id,userId,'userId')
+// console.log(product_id,userId,'userId')
         // Check if the product with the given product_id exists
         // const product = await Products.findByPk(product_id);
 

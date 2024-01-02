@@ -2,7 +2,7 @@
 const { sq } = require('../config/db')
 const { Sequelize, DataTypes } = require('sequelize');
 
-const ProductOffer = sq.define('product_offer', {
+const ProductOffer = sq.define('ProductOffer', {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -18,6 +18,8 @@ const ProductOffer = sq.define('product_offer', {
     allowNull: false,
   },
 },{
+ 
+  tableName: 'Product_Offer',
     timestamps: false,
     freezeTableName: true,
 }

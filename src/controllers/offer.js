@@ -5,7 +5,7 @@ const PostOffer=async(req,res)=>{
     console.log('INFO -> PostOffer INFO API CALLED')
 
     try {
-        const { title, description, discountType, discountValue, termsAndConditions,productId,active ,category} = req.body;
+        const { title, description, discountType, discountValue, termsAndConditions,productId,active ,category,gift_id} = req.body;
     console.log(req.body,'diwakar kumarrrrrrr')
         // Create the offer in the database
         const newOffer = await Offer.create({
@@ -15,7 +15,8 @@ const PostOffer=async(req,res)=>{
           termsAndConditions,
           active, // Add "active" field
           category,
-          discountType
+          discountType,
+          gift_id
         });
     
         // Associate the offer with selected products
@@ -74,8 +75,45 @@ const getproductwithoffersinfo=async(req,res)=>{
     res.status(500).json({ message: 'Error fetching products with associated offers' });
   }
 }
+
+const getofferdetail=async(req,res)=>{
+console.log('getofferdetail api called')
+try{
+  const offerdetails = req.body;
+console.log(offerdetails,'offerdetailsofferdetails')
+  // Log the content of matchingProductOffer with indentation
+ 
+  const offerIds = offerdetails.map(item => item.offerId);
+  // const productId=offerdetails.map(item=>item.offerId)
+  const offerDetailsFromDatabase = await Offer.findAll({
+    where: {
+      offer_id: offerIds
+    }
+  });
+  const giftIds = offerDetailsFromDatabase.map(offer => offer.dataValues.gift_id);
+  console.log(giftIds);
+
+const productidbygift=await Products.findAll({
+  where:{
+    product_id:giftIds
+  }
+})
+
+// console.log(productidbygift,'productidbygiftproductidbygiftproductidbygift');
+res.json(productidbygift);
+// console.log(offerIds)
+
+
+}catch(error){
+  console.error(error);
+    res.status(500).json({ message: 'Error fetching products with associated offers' });
+}
+}
+
+
 module.exports={
     PostOffer,
     getproductwithoffer,
-    getproductwithoffersinfo
+    getproductwithoffersinfo,
+    getofferdetail
 }

@@ -34,6 +34,11 @@ const Offer = sq.define('offer', {
 
 
   },
+  gift_id:{
+    type:DataTypes.INTEGER,
+    allowNull: true,
+
+  },
   active: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
@@ -46,6 +51,7 @@ const Offer = sq.define('offer', {
   },
 },
 {
+
     timestamps: false,
     freezeTableName: true,
  
