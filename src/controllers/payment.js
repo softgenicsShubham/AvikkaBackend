@@ -79,9 +79,9 @@ const pay=async(req,res,next)=>{
       "merchantTransactionId": tx_uuid,
       "merchantUserId": "MUID123",
       "amount": req.body.Subtotal*100,
-      "redirectUrl": "http://192.168.1.34:3000/pay-return-url/",
+      "redirectUrl": "http://192.168.29.99:3000/pay-return-url/",
       "redirectMode": "POST",
-      "callbackUrl": "http://192.168.1.34:3000/pay-return-url/",
+      "callbackUrl": "http://192.168.29.99:3000/pay-return-url/",
       "mobileNumber": req.body.addressToSend.contact_number,
       "paymentInstrument": {
         "type": "PAY_PAGE"

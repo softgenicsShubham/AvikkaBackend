@@ -90,6 +90,7 @@ console.log(offerdetails,'offerdetailsofferdetails')
       offer_id: offerIds
     }
   });
+  // console.log(offerDetailsFromDatabase,'offerDetailsFromDatabase')
   const giftIds = offerDetailsFromDatabase.map(offer => offer.dataValues.gift_id);
   console.log(giftIds);
 

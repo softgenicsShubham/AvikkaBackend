@@ -33,7 +33,7 @@ const seller=require('./seller');
 
 const referral=require('./referral');
 const productoffer=require('./ProductOffer');
-
+const wallet=require('./wallet')
 
 
 
@@ -72,6 +72,8 @@ router.use('/',seller);
 
 router.use('/',referral);
 router.use('/',productoffer);
+router.use('/',wallet);
+
 
 
 

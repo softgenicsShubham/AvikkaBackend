@@ -23,7 +23,8 @@ const orderItem = require('./OrderItem')
 
 const bank_detail=require('./bank_detail')
 
-
+const wallet=require('./wallet')
+const transaction=require('./transaction')
 
 
 module.exports = {
@@ -49,5 +50,7 @@ module.exports = {
   Quantity,
   Specification,
   orderItem,
-  bank_detail
+  bank_detail,
+  wallet,
+  transaction
 };

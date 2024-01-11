@@ -189,6 +189,12 @@ const productdetail = async (req, res) => {
     const productId = req.params.productId;
 
     let product = await Products.findOne({
+      include: [
+       
+        {
+          model: Specification, // Assuming you have a relationship between Products and Review
+        }
+      ],
       where: {
         product_id: productId
       },
@@ -199,7 +205,7 @@ let branddetails=await Brand.findOne({
     brand_id:product.brand_id
   }
 })
-console.log(branddetails,'branddetailsbranddetails')
+console.log(product,'branddetailsbranddetails')
     product = JSON.parse(JSON.stringify(product))
 
     // product.ideal_for = JSON.parse(JSON.stringify(product.ideal_for))
