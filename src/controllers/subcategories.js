@@ -52,7 +52,7 @@ const editSubCategories = async (req, res) => {
             categories_name,
             subCetegories_name,
             subCetegories_id,
-        }, { where: { id: subCategoriesId, } })
+        }, { where: { subCategories_id: subCategoriesId, } })
 
         const updatedSubCat = await subCetegories.findByPk(subCategoriesId)
         res.status(200).json({ updatedBanner: updatedSubCat, message: 'Banner updated successfully' });
@@ -66,11 +66,11 @@ const editSubCategories = async (req, res) => {
 const deleteSubCategories = async (req, res) => {
     const subCategoriesId = req.params.id;
     try {
-        const data = await subCetegories.destroy({where:{id:subCategoriesId}})
+        const data = await subCetegories.destroy({where:{ subCategories_id:subCategoriesId}})
         if (!data){
             return res.status(400).json({ error: 'subCetegories id not found' });
         }
-        res.status(200).send({ id: subCategoriesId, message: 'subCetegories deleted successfully' });
+        res.status(200).send({ data: data, message: 'subCetegories deleted successfully' });
     } catch (error) {
         console.error('Error Delete subCetegoriesr by ID:', error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -106,5 +106,15 @@ const getSubCategoriesbyname = async (req, res) => {
     }
 }
 
+const getSubCategoriesbyid=async(req,res)=>{
+try{
+const id=req.params['id'];
+const data=await subCetegories.findOne({
+where:{subCategories_id:id}});
+res.status(200).send({data:data,'message':"success full"});
+}catch(error){
+res.status(500).json(error);
+}
+}
+module.exports = { postsubCetegories, getSubCategories, editSubCategories,deleteSubCategories ,getSubCategoriesbyname,getSubCategoriesbyid}
 
-module.exports = { postsubCetegories, getSubCategories, editSubCategories,deleteSubCategories ,getSubCategoriesbyname}

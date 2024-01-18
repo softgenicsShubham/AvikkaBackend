@@ -68,7 +68,7 @@ const editCategories = async (req, res) => {
             categories_id,
         }, {
             where: {
-                id: cetegoriesId,
+               categories_id: cetegoriesId,
             },
         }
         );
@@ -84,7 +84,7 @@ const deleteCategories = async (req, res) => {
     const cetegoriesId = req.params.id;
     try {
         // Find the banner by its ID and delete it
-        const deletedCategories = await cetegories.destroy({ where: { id: cetegoriesId } });
+        const deletedCategories = await cetegories.destroy({ where: { categories_id: cetegoriesId } });
 
         if (!deletedCategories) {
             return res.status(404).json({ error: 'Categories not found' });
@@ -211,5 +211,23 @@ const getcategoriesitem = async (req, res) => {
 
 }
 
+const getcategoriesById=async(req,res)=>{
 
-module.exports = { postCategories, getCategories, editCategories, deleteCategories, getcategoriesitem }
+    const cetegoriesId = req.params.id;
+    try {
+        // Find the banner by its ID and delete it
+        let resultcat = await cetegories.findOne({
+            where: {
+                categories_id:cetegoriesId
+            }
+        })
+
+        res.status(200).send({ data:resultcat, message: 'Categories deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting Categories by ID:', error);
+        }
+}
+
+
+module.exports = { postCategories, getCategories, editCategories, deleteCategories, getcategoriesitem,getcategoriesById }
+

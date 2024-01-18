@@ -5,6 +5,6 @@ const {userAuth}=require('../middleware/authmiddleware')
 
 router.post('/order/',userAuth,orderapi.create_order)
 router.get('/getorder/',userAuth,orderapi.getorderdetail)
-
+router.get('/getallorder/',orderapi.getallorderdetail)
 
 module.exports = router;

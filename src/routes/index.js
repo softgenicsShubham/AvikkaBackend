@@ -39,7 +39,7 @@ const productoffer=require('./ProductOffer');
 
 const selleradmin = require('./selleradmin/index')
 
-
+const gift=require('./add_gift')
 
 
 
@@ -72,7 +72,7 @@ router.use('/',seller);
 
 router.use('/',referral);
 router.use('/',productoffer);
-
+router.use('/',gift);
 
 
 

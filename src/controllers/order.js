@@ -128,7 +128,25 @@ const getorderdetail=async(req,res)=>{
     }
 
 }
+
+const getallorderdetail=async(req,res)=>{
+   
+
+    try{
+const orderdata = await order.findAll();
+      console.log(orderdata.length,'orderdata')
+      res.json({ orderdata });
+    }catch(error){
+        console.error(error);
+        res.status(500).json({ message: 'Error generated while processing your request', error });
+
+    }
+
+}
+
+
 module.exports = {
     create_order,
-    getorderdetail
+    getorderdetail,
+getallorderdetail
 }

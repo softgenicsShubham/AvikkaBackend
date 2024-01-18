@@ -22,7 +22,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const Addproduct = async (req, res) => {
-  console.log('api called')
+  console.log('add product api called')
   try {
     // Handle file upload using multer
     // upload.single('product_image')(req, res, (err) => {
@@ -86,6 +86,10 @@ const Addproduct = async (req, res) => {
       })
 
       // Create a new product record in the database
+      const productColorData = req.body.product_color;
+ const colorNames = productColorData.split(',');
+ const cleanedColorNames = colorNames.filter((name) => name.trim() !== '');
+
       Products.create({
         product_name: req.body.product_name,
         product_categories: req.body.categories,
@@ -96,6 +100,7 @@ const Addproduct = async (req, res) => {
         // product_img: productImage.filename, // Store the selected product image
         product_thumnail_img: imageUrl, // Store the selected thumbnail image
         product_ad: req.body.product_ad,
+        newlaunchage_product:req.body.newlaunchage_product,
         offer: req.body.offer,
         count_in_stock: req.body.count_in_stock,
         rating: req.body.rating,
@@ -108,9 +113,10 @@ const Addproduct = async (req, res) => {
         subCategories_id: req.body.subCetegories_id,
         place: req.body.place,
         product_detail_allimage:allimagesUrls,
-        product_color:req.body.product_color,
+        product_color:cleanedColorNames,
         product_quantity:req.body.product_quantity,
         product_description_allimg:product_dis_allimgurl
+
       });
 
       return res.json({ message: 'Product added successfully', Products });
@@ -129,7 +135,7 @@ const Addproduct = async (req, res) => {
 
 
 const getproduct = async (req, res) => {
-
+console.log("call all products");
   try {
     const Featured = await Products.findAll({
       where: {
@@ -159,7 +165,7 @@ const getproduct = async (req, res) => {
     });
     // res.json(products);
     // console.log(products, "pppppppp")
-
+console.log("all producs",products);
     return res.status(200).send({
       success: 'success',
       result: products,
@@ -182,13 +188,17 @@ const getproduct = async (req, res) => {
 
 
 
-
-
 const productdetail = async (req, res) => {
   try {
     const productId = req.params.productId;
 
     let product = await Products.findOne({
+      include: [
+       
+        {
+          model: Specification, // Assuming you have a relationship between Products and Review
+        }
+      ],
       where: {
         product_id: productId
       },
@@ -199,7 +209,7 @@ let branddetails=await Brand.findOne({
     brand_id:product.brand_id
   }
 })
-console.log(branddetails,'branddetailsbranddetails')
+console.log(product,'branddetailsbranddetails')
     product = JSON.parse(JSON.stringify(product))
 
     // product.ideal_for = JSON.parse(JSON.stringify(product.ideal_for))
@@ -218,7 +228,6 @@ console.log(branddetails,'branddetailsbranddetails')
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
-
 
 
 
