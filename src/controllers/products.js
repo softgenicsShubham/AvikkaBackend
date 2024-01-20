@@ -432,7 +432,7 @@ console.log("producs by id",result);
 
 }
 const editproduct = async (req, res) => {
-  console.log('editproduct seller api called');
+  console.log('editproduct  api called');
   try {
     const productId = req.params.id;
     
