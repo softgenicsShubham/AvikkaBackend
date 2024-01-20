@@ -411,12 +411,40 @@ console.log(filteredProducts,'filteredProductsfilteredProducts')
     res.status(500).json({ error: 'Internal server error' });
   }
 }
+const getproductById=async(req,res)=>{
+  const id= req.params.id;
+  console.log("call id products");
+  try {
+    const result=await Products.findOne({where:{product_id:id},
+ include: [
+        {
+          model: Review, // Assuming you have a relationship between Products and Review
+        }
+       
+      ]
+});
+   
+    
+console.log("producs by id",result);
+    return res.status(200).send({
+      success: 'success',
+      result: result,
+    });
 
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+  
+
+}
 
 module.exports = {
   Addproduct,
   getproduct,
   productdetail,
   fillterDataget,
-  applyfilter
+  applyfilter,
+  getproductById,
+  
 }
