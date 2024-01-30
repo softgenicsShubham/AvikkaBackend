@@ -115,5 +115,5 @@ module.exports={
     PostOffer,
     getproductwithoffer,
     getproductwithoffersinfo,
-    getofferdetail
+  getofferdetail
 }

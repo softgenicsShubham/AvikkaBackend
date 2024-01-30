@@ -23,6 +23,6 @@ router.get('/auth/', userAuth, authenticationapi.userInfo)
 router.post('/auth/verify-otp/', authenticationapi.getverifyotp)
 
 router.put('/auth/editprofile/', userAuth, authenticationapi.updateprofile)
-
+router.get('/getuser/', authenticationapi.getuser);
 
 module.exports = router;

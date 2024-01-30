@@ -343,12 +343,23 @@ const updateprofile = async (req, res) => {
   }
 };
 
+const getuser=async(req,res)=>{
+  try{
+  const user= await registration.findAll();
+  res.status(200).json(user);
+  }
+  catch(err){
+    console.error(err);
+  }
+}
+
 
 module.exports = {
   getAuthentication,
   getverifyotp,
   userInfo,
-  updateprofile
+  updateprofile,
+getuser
 };
 
 

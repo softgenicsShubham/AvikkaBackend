@@ -438,6 +438,160 @@ console.log("producs by id",result);
   
 
 }
+const editproduct = async (req, res) => {
+  console.log('editproduct seller api called');
+  try {
+    const productId = req.params.id;
+    
+    console.log(productId, 'emailemail');
+
+    // Find the product to be updated
+    const existingProduct = await Products.findOne({
+     where:{
+      product_id: productId,}
+    });
+ console.log(req.body,"request data")
+
+    if (!existingProduct) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    upload.fields([
+      { name: 'product_thumnail_img', maxCount: 10 },
+      { name: 'ideal_for_img', maxCount: 10 },
+      { name: 'work_for_img', maxCount: 1 },
+      { name: 'product_detail_allimage', maxCount: 10 },
+{name:'product_description_allimg',maxCount: 10 }
+    ])(req, res, async (err) => {
+      if (err) {
+        return res.status(400).json({ message: 'File upload failed' });
+      }
+
+      
+      console.log(req.body,"request data")
+
+      const thumbnailImage = req.files['product_thumnail_img'][0];
+
+      // console.log(thumbnailImage,'thumbnailImagethumbnailImagethumbnailImage')
+      const allimages = req.files['product_detail_allimage']
+      console.log(allimages,'allimages')
+      if (!allimages) {
+        return res.status(400).json({ message: 'No files were uploaded for product_thumbnail_img' });
+      }
+      //     // const firstThumbnailImage = thumbnailImage[0];
+
+      // // Access and work with all uploaded thumbnail images
+      const allimagesUrls = allimages.map((allImage) => {
+        return `uploads/productthumbnail/${allImage.filename}`;
+      });
+console.log(allimagesUrls,'allimagesUrls')
+
+const product_dis_allimg=req.files['product_description_allimg']
+
+
+      if (!product_dis_allimg) {
+        return res.status(400).json({ message: 'No files were uploaded for product_thumbnail_img' });
+      }
+      //     // const firstThumbnailImage = thumbnailImage[0];
+
+      // // Access and work with all uploaded thumbnail images
+      const product_dis_allimgurl = product_dis_allimg.map((allImage) => {
+        return `uploads/productthumbnail/${allImage.filename}`;
+      });
+
+
+      const ideal_for_img = req.files['ideal_for_img'][0];
+      const work_for_img = req.files['work_for_img'][0];
+      const imageUrl = `uploads/productthumbnail/${thumbnailImage.filename}`;
+      const imageUrl_ideal_for_img = `uploads/productthumbnail/${ideal_for_img.filename}`;
+      const imageUrl_work_for_img = `uploads/productthumbnail/${work_for_img.filename}`
+      console.log(imageUrl_ideal_for_img, 'imageUrl_ideal_for_img')
+
+      const ideal_for = [];
+      ideal_for.push({
+        ideal_for_title: req.body.ideal_for_title,
+        ideal_for_img: imageUrl_ideal_for_img,
+      });
+      const product_work_for = [];
+      product_work_for.push({
+        work_for_title: req.body.work_for_title,
+        work_for_img: imageUrl_work_for_img
+      })
+      // Update the existing product
+      // const product_name=req.body.product_name;
+      // const product_categories=req.body.categories;
+      // const updatedata={
+      //   product_name,
+      // product_categories,
+      
+      // }
+
+ // Handle color data
+ const productColorData = req.body.product_color;
+ const colorNames = productColorData.split(',');
+ const cleanedColorNames = colorNames.filter((name) => name.trim() !== '');
+
+
+
+      existingProduct.product_name = req.body.product_name;
+      existingProduct.product_categories = req.body.categories;
+      existingProduct.brand_id = req.body.brand_id;
+      existingProduct.product_title = req.body.product_title;
+      existingProduct.product_description = req.body.product_description;
+      existingProduct.product_price = req.body.product_price;
+      existingProduct.product_thumnail_img = imageUrl;
+      existingProduct.product_ad = req.body.product_ad;
+      existingProduct.newlaunchage_product=req.body.newlaunchage_product;
+      existingProduct.offer = req.body.offer;
+      existingProduct.count_in_stock = 10;
+      existingProduct.rating = req.body.rating;
+      existingProduct.discount = req.body.discount;
+      existingProduct.highlights = req.body.highlights;
+      existingProduct.ideal_for = ideal_for;
+      existingProduct.product_work_for = product_work_for;
+      existingProduct.product_expiry_date = req.body.product_expiry_date;
+      existingProduct.categories_id = req.body.categories_id;
+      existingProduct.subCategories_id = req.body.subCetegories_id;
+      existingProduct.place = req.body.place;
+      existingProduct.product_detail_allimage = allimagesUrls;
+      existingProduct.product_color = cleanedColorNames;
+      existingProduct.product_quantity = req.body.product_quantity;
+       existingProduct. product_description_allimg=product_dis_allimgurl
+
+      // existingProduct.set(updatedata); // Use the set method to update properties
+      const resultupdate=await existingProduct.save();// Save the updated product
+console.log(resultupdate,"Product edited ");
+      return res.json({ message: 'Product updated successfully', product: existingProduct });
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const admiminproduct=async(req,res)=>{
+  console.log("call all products");
+  try {
+   
+   
+   
+    // console.log(primer, 'primer')
+    const products = await Products.findAll({
+     where:{seller_id:null}
+    });
+    
+console.log("all producs",products);
+    return res.status(200).send({
+      success: 'success',
+      result: products,
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
 
 module.exports = {
   Addproduct,
@@ -446,5 +600,6 @@ module.exports = {
   fillterDataget,
   applyfilter,
   getproductById,
-  
+  editproduct,
+admiminproduct,
 }
