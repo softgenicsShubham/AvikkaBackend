@@ -22,7 +22,7 @@ const Offer = sq.define('offer', {
   },
   discountType: {
     type: DataTypes.ENUM('flat', 'percentage', 'buy-one-get-one','Buy 2 Get Free Gift'),
-    allowNull: false,
+    allowNull: true,
   },
   discountValue: {
     type: DataTypes.DECIMAL(10, 2),
@@ -34,6 +34,28 @@ const Offer = sq.define('offer', {
 
 
   },
+ Quantity:{
+    type:DataTypes.INTEGER,
+    allowNull: true,
+
+  },
+minamount:{
+    type:DataTypes.INTEGER,
+    allowNull: true,
+
+  },
+offertype:{
+    type:DataTypes.STRING,
+    allowNull: true,
+
+  },
+validdate:{
+    type:DataTypes.STRING,
+    allowNull: true,
+
+  },
+
+
   gift_id:{
     type:DataTypes.INTEGER,
     allowNull: true,

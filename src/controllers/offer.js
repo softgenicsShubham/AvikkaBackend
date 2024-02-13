@@ -5,7 +5,7 @@ const PostOffer=async(req,res)=>{
     console.log('INFO -> PostOffer INFO API CALLED')
 
     try {
-        const { title, description, discountType, discountValue, termsAndConditions,productId,active ,category,gift_id} = req.body;
+        const { title, description, discountType, discountValue, termsAndConditions,productId,active,Quantity,minamount,offertype,validdate ,category,gift_id} = req.body;
     console.log(req.body,'diwakar kumarrrrrrr')
         // Create the offer in the database
         const newOffer = await Offer.create({
@@ -16,7 +16,12 @@ const PostOffer=async(req,res)=>{
           active, // Add "active" field
           category,
           discountType,
-          gift_id
+Quantity,
+minamount,
+         offertype,
+         validdate,
+          gift_id,
+
         });
     
         // Associate the offer with selected products
@@ -110,10 +115,22 @@ res.json(productidbygift);
 }
 }
 
+const getalloffer=async(req,res)=>{
+try{
 
+const result=await Offer.findAll();
+res.send(result);
+}
+catch(error){
+console.error(error);
+    res.status(500).json({ message: 'Error fetching products with associated offers' });
+
+}
+}
 module.exports={
     PostOffer,
     getproductwithoffer,
     getproductwithoffersinfo,
-  getofferdetail
+  getofferdetail,
+getalloffer
 }

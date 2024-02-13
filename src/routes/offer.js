@@ -22,5 +22,7 @@ router.post('/applyOffer',offerManagement.appliedOffer);
 router.get('/availableOffer',offerManagement.getAllOffers);
 router.get('/productOffer',offerManagement.getAllOffers);
 router.post('/getofferdetail',offerController.getofferdetail)
+router.get('/getalloffer',offerController.getalloffer)
+
 
 module.exports = router;

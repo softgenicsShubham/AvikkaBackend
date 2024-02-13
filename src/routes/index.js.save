@@ -40,11 +40,9 @@ const productoffer=require('./ProductOffer');
 const selleradmin = require('./selleradmin/index')
 
 const gift=require('./add_gift')
-const admin = require('./admin/superadmin')
+const admin = require('./adminauth/superadmin')
 
 
-
-router.use('/', admin)
 
 router.use('/', authentication)
 router.use('/', brand)
