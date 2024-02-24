@@ -15,5 +15,9 @@ router.get('/admin_product',productapi.admiminproduct);
 router.get('/api/products/all/filter', productsController.fillterData)
 router.post('/api/products/all/filter/data',productsController.fillterDataget)
 router.get('/api/products/all/filter/new', productsController.fillterNewData)
+router.delete('/products/delete/:id', productapi.deleteproduct);
+router.put('/verifyproduct/:id',productapi.product_verifybyadmin)
+
+
 
 module.exports = router;

@@ -130,6 +130,12 @@ const Products = sq.define('products', {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
+    product_verify:{
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+
+    },
     newlaunchage_product: {
         type: DataTypes.BOOLEAN,
         allowNull: false

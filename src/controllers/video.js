@@ -101,11 +101,7 @@ const getvideoinfobyVideothumnail_id=async(req,res)=>{
     console.log('INFO -> getvideoinfobyVideothumnail_id INFO API CALLED')
     try{
         const {Videothumnail_id}=req.params
-        const allvideo = await Video.findAll({
-            where:{
-                Videothumnail_id:Videothumnail_id
-            }
-        }); 
+        const allvideo = await Video.findByPk(Videothumnail_id);
         console.log(allvideo)
         res.json({ allvideo });
     

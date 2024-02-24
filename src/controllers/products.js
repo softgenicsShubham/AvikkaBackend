@@ -7,6 +7,7 @@ const path = require('path');
 const  Sequelize  = require('sequelize')
 const { fn, col, literal } = Sequelize;
 const { Op } = require('sequelize');
+const { apigateway } = require('googleapis/build/src/apis/apigateway');
 
 // ...
 
@@ -591,6 +592,45 @@ console.log("all producs",products);
     return res.status(500).json({ message: 'Internal server error' });
   }
 }
+const deleteproduct = async (req, res) => {
+  console.log('deleteproduct api called')
+    try {
+    //   const userId = req.userData.user_id; // Adjust this based on your authentication mechanism
+      const product_id = req.params.id;
+  console.log(product_id,'color_id')
+      const existingproduct = await Products.findOne({
+        where: {
+          product_id: product_id,
+        },
+      });
+
+      if (!existingproduct) {
+        return res.status(404).json({ message: 'product not found ' });
+      }
+
+      await existingproduct.destroy();
+      console.log(existingproduct,'existingcolorItem')
+
+      res.status(200).json({ message: 'product removed from the data base successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error generated while processing your request', error });
+    }
+  };
+
+  const product_verifybyadmin=async(req,res)=>{
+    const product_id = req.params.id;
+    try{
+const product=await Products.findByPk(product_id);
+product.product_verify=true;
+product.save();
+res.status(200).send("success");
+    }
+    catch(error){
+console.log(error,"Error")
+    }
+  }
+
 
 
 module.exports = {
@@ -602,4 +642,6 @@ module.exports = {
   getproductById,
   editproduct,
 admiminproduct,
+deleteproduct,
+product_verifybyadmin
 }

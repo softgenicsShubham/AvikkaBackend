@@ -165,8 +165,37 @@ try{
 
 }
 }
+const getallmyreviewsforadmin=async(req,res)=>{
+  try{
+    
+    const allreviewdata=await Review.findAll()
+    console.log(allreviewdata,'cartProducts')
+    res.status(200).json({ allreviewdata });
+  
+  }catch(error){
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  
+  }
+}
+const deletereviewsforadmin=async(req,res)=>{
+  id = req.params.id
+  try{
+    
+    const allreviewdata=await Review.findByPk(id)
+    const result=allreviewdata.destroy();
+    res.status(200).json(result);
+  
+  }catch(error){
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  
+  }
+}
 module.exports = {
   AddReviewAndRating,
   getallreview,
-  getallmyreviews
+  getallmyreviews,
+  getallmyreviewsforadmin,
+  deletereviewsforadmin
 }
